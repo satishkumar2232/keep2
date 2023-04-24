@@ -32,11 +32,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 			post(id: "/${path}/", idType: URI) {
 				id
 				excerpt
-				title
 				link
 				dateGmt
 				modifiedGmt
-				content
 				author {
 					node {
 						name
