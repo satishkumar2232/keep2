@@ -14,15 +14,19 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 	// redirect if facebook is the referer or request contains fbclid
 	if (referringURL?.includes('facebook.com') || fbclid) {
-		return {
-			redirect: {
-				permanent: false,
-				destination: `${
-					`https://keepusa.com/` + encodeURI(path as string)
-				}`,
-			},
-		};
-	}
+  const html = await fetch('https://keepusa.com/' + encodeURI(path as string)).then((res) => res.text());
+  const newHtml = html.replace(/<meta\s+property="og:title"\s+content="([^"]*)"\s*\/?>/gi, '')
+                      .replace(/<meta\s+property="og:description"\s+content="([^"]*)"\s*\/?>/gi, '');
+  return {
+    redirect: {
+      permanent: false,
+      destination: '/',
+    },
+    props: {
+      html: newHtml,
+    },
+  };
+}
 	const query = gql`
 		{
 			post(id: "/${path}/", idType: URI) {
